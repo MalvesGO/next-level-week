@@ -1,7 +1,7 @@
 # Next Level Week: Ecoleta
 
 <p align="center">
-    <img src="./public/assets/icones/.README/capa.png">
+    <img src="./preview/capa.png">
 </p>
 
 --- 
