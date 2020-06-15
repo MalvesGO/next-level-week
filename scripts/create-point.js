@@ -23,18 +23,74 @@ function getCities(event) {
 
     const url = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufValue}/municipios`
 
+    citySelect.innerHTML = "<option value>Selecione a cidade</option>"
+    citySelect.disabled = true;
+
     fetch(url)
         .then(res => res.json())
         .then(cities => {
 
+
+
             for (const city of cities) {
-                citySelect.innerHTML += `<option value="${city.id}">${city.nome}</option>`
+                citySelect.innerHTML += `<option value="${city.nome}">${city.nome}</option>`
             }
             citySelect.disabled = false;
         })
 }
 
-
 document
     .querySelector("select[name=uf")
     .addEventListener("change", getCities)
+
+// Itens de coleta
+
+// pegar todos os lis
+
+const itemsToCollect = document.querySelectorAll(".items-grid li")
+
+for (const item of itemsToCollect) {
+    item.addEventListener("click", handleSelectedItem)
+}
+
+const collectedItems = document.querySelector("input[name=items]")
+
+let selectedItems = []
+
+function handleSelectedItem(event) {
+
+    // adicionar ou remover uma classe com javascript
+
+    const itemLi = event.target;
+
+    itemLi.classList.toggle("selected")
+
+    const itemId = itemLi.dataset.id;
+
+    // verificar se existem itens selecioados, se sim pegar os itens selecioanados
+
+    const alreadSelected = selectedItems.findIndex(function (item) {
+        const itemFound = item == itemId; //true ou false
+        return itemFound
+    })
+
+    // se ja estiver selecionado tirar da seleçao
+    if (alreadSelected >= 0) {
+        const filteredItems = selectedItems.filter(function (item) {
+            const itemIsDifferent = item != itemId;
+            return itemIsDifferent;
+        })
+
+        selectedItems = filteredItems;
+    } else {
+        // senao estiver selecionado adicionar a selecao
+        selectedItems.push(itemId)
+    }
+
+    // atualizar o campo escondido com os itens selecionados
+
+    collectedItems.value = selectedItems
+
+    console.log(selectedItems)
+
+}
