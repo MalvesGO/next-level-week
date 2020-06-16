@@ -1,93 +1,98 @@
-const express = require("express");
-const nunjucks = require("nunjucks");
+const express = require("express")
+const server = express()
 
-const db = require("./database/db.js")
+// pegar o banco de dados
+const db = require("./database/db")
 
-const server = express();
+//configurar pasta public
+server.use(express.static("public"))
 
-// set path
-server.use(express.static("public"));
-server.use(express.urlencoded({ extended: true }));
+// habilitar o uso do req.body na nossa aplicação
+server.use(express.urlencoded({ extended: true }))
 
-// template engine
+//utilizando template engine
+const nunjucks = require("nunjucks")
 nunjucks.configure("src/views", {
     express: server,
-    noCache: true // just for development
-});
+    noCache: true
+})
 
-// Routes
-// /* Do: transform into class - Routes */
+// configurar caminhos da minha aplicação
+// página inicial
+// req: requisição
+// res: resposta
 server.get("/", (req, res) => {
-    return res.render("index.html");
-});
+    return res.render("index.html", { title: "Um título" })
+})
 
-server.get("/create-point.whtml", (req, res) => {
-    return res.render("create-point.html");
-});
+server.get("/create-point", (req, res) => {
 
+    // req.query: Query Strings da nossa url
+    // console.log(req.query)
 
-function error(error, message) {
-    if (error) {
-        console.log(error);
-        return res.send(message);
-    }
-}
+    return res.render("create-point.html")
+})
 
 server.post("/savepoint", (req, res) => {
-    const insert = (`
+    // req.body: O corpo do nosso formulário
+    // inserir dados no nosso banco de dados
+    const query = `
     INSERT INTO places (
-        image, 
-        name, 
-        address, 
-        address2, 
-        state, 
-        city, 
-        items
-    ) VALUES (?,?,?,?,?,?,?); `);
-
-    const values = ([
-        req.body.image,
-        req.body.name,
-        req.body.address,
-        req.body.address2,
-        req.body.state,
-        req.body.city,
-        req.body.items
-    ]);
-
-    console.log(values)
+    image,
+    name,
+    address,
+    address2,
+    state,
+    city,
+    items
+    ) VALUES (?,?,?,?,?,?,?);
+`
+    const values = [
+    req.body.image,
+    req.body.name,
+    req.body.address,
+    req.body.address2,
+    req.body.state,
+    req.body.city,
+    req.body.items
+]
 
     function afterInsertData(err) {
-        error(err, "Erro no cadastro!");
-        console.log("Cadastrado com sucesso");
-        console.log(this);
+        if(err) {
+            console.log(err)
+            return res.send("Erro no cadastro!")
+        }
+            console.log("Cadastrado com sucesso!")
+            console.log(this)
 
-        return res.render("create-point.html", {
-            saved: true
-        });
-    }
-    db.run(insert, values, afterInsertData);
-});
+            return res.render("create-point.html", { saved: true })
+        }
 
-server.get("/search", (req, res) => {
-    const search = req.query.search;
+    db.run(query, values, afterInsertData)   
+})
+ 
+    server.get("/search", (req, res) => {
+        const search = req.query.search
+        if(search == "") {
+            // pesquisa vazia
+            return res.render("search.html", {total: 0})
+        }
 
-    if (search == "") {
-        return res.render("search-results.html", { total: total = 0 });
-    }
+    // pegar os dados do banco de dados
+        db.all(`SELECT * FROM places WHERE city LIKE '%${search}%'`, function(err, rows) {
+          if(err) {
+            return console.log(err)
+        }
 
-    db.all(`SELECT * FROM places WHERE city LIKE '%${search}%'`, function(err, rows) {
-        error(err, "Erro na consulta!");
-        console.log("Aqui estão seus registro");
-        console.log(rows);
+    //console.log("Aqui estão seus registros: ")
+    //console.log(rows)
 
-        const total = rows.length;
+        const total = rows.length
 
-        // return from consultation
-        return res.render("search-results.html", {
-            places: rows,
-            total: total
-        });
-    });
-});
-server.listen(3000);
+        // mostrar a pãgina html com os dados do banco de dados
+        return res.render("search.html", { places: rows, total: total})
+      })
+})
+
+//ligar o servidor 
+server.listen(3005)
