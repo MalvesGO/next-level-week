@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+
+<head>
+    {% include "include/head.html" %}
+    <link rel="stylesheet" href="./assets/css/home-min.css">
+</head>
+
+<body>
+    <div id="page-home">
+        <div class="content">
+            <header>
+                <a href="/">
+                    <img src="./assets/icones/logo.svg" alt="logomarca">
+                </a>
+                <a href="/create-point.whtml">
+                    <span></span> Cadastre um ponto de coleta
+                </a>
+            </header>
+
+            <main>
+                <h1> Seu marketplace de coleta de resíduos.</h1>
+                <p> Ajudamos pessoas a encontrarem pontos de coleta de forma eficiente.</p>
+                <a href="#">
+                    <span> </span>
+                    <strong>Pesquisar pontos de coleta</strong>
+                </a>
+            </main>
+        </div>
+    </div>
+
+    {% include "include/modal.html" %}
+
+    <script src="assets/js/home/button-search-min.js"></script>
+</body>
+
+</html>

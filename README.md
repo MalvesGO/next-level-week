@@ -1,7 +1,7 @@
 # Next Level Week: Ecoleta
 
 <p align="center">
-    <img src="./preview/capa.png">
+    <img src="./public/assets/icones/.README/capa.png">
 </p>
 
 --- 
@@ -35,7 +35,7 @@ npm install sqlite3
 # [Layout](https://www.figma.com/file/1SxgOMojOB2zYT0Mdk28lB/Ecoleta) 
 ## Panorâma
 <p align="center">
-    <img src="./preview/panorama.png">
+    <img src="./public/assets/icones/.README/panorama.png">
 </p>
 
 ## Home 

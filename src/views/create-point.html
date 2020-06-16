@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    {% include "include/head.html" %}
+    <link rel="stylesheet" href="assets/css/create-point-min.css">
+</head>
+
+<body>
+
+    <div id="page-create-point">
+
+        {% include "include/header.html" %}
+
+        <form action="">
+            <h1>Cadastro do ponto de coleta</h1>
+
+            {% include "include/fieldset/entidade.html" %}
+            <br> {% include "include/fieldset/coleta.html" %}
+
+
+            <button type="submit">Cadastrar ponto de coleta</button>
+        </form>
+    </div>
+
+    <script src="assets/js/create-point/ibge-localidades-min.js"></script>
+    <script src="assets/js/create-point/item-handling-min.js"></script>
+
+</body>
+
+</html>
